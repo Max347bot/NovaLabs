@@ -66,7 +66,10 @@ test.describe("Forgot password flow", () => {
     await expect(
       page.getByRole("heading", { name: /^Reset Password$/i }),
     ).toBeVisible();
-    await page.getByLabel(/New Password/i).fill("StrongPass1");
+    // `exact: true` to avoid strict-mode collision with the Confirm New
+    // Password input (its label "Confirm New Password" contains the
+    // substring "New Password" which a regex matches against both).
+    await page.getByLabel("New Password", { exact: true }).fill("StrongPass1");
     await page.getByLabel(/Confirm New Password/i).fill("StrongPass1");
     await page.getByRole("button", { name: /^Reset Password$/i }).click();
 
